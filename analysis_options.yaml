@@ -13,6 +13,7 @@ analyzer:
   # Some IDE analyzer versions still flag `formatter` as unsupported.
   # Keep it as ignore to allow formatter config while staying backward-compatible.
   errors:
+    must_be_immutable: ignore
     unsupported_option: ignore
 
 linter:
