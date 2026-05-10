@@ -22,7 +22,16 @@ class OnboardingScreen extends StatelessWidget {
                 builder: (context, OnboardingController value, child) {
                   return onboardingController.isLastPage
                       ? SizedBox.shrink()
-                      : TextButton(onPressed: () {}, child: Text('Skip'));
+                      : TextButton(
+                          onPressed: () {
+                            value.pageController.animateToPage(
+                              2,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.decelerate,
+                            );
+                          },
+                          child: Text('Skip'),
+                        );
                 },
               ),
             ],
@@ -81,7 +90,6 @@ class OnboardingScreen extends StatelessWidget {
                       ),
                     );
                   },
-                
                 ),
                 SizedBox(height: 114),
                 SizedBox(
