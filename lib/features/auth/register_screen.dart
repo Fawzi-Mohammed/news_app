@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/datasource/local_data/preference_manger.dart';
 import 'package:news_app/core/widgets/custom_text_form_field.dart';
+import 'package:news_app/features/main/main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,6 +17,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? errorMessage;
+  bool isLoading = false;
   @override
   void dispose() {
     super.dispose();
@@ -100,15 +104,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
+                if (errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      errorMessage!,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton(
-                    child: const Text('Sign Up'),
+                    child: isLoading
+                        ? CircularProgressIndicator()
+                        : const Text('Sign Up'),
                     onPressed: () {
                       if (_formKey.currentState?.validate() ?? false) {
                         // Perform registration logic here
+                        register();
                       }
                     },
                   ),
@@ -139,5 +155,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  void register() async {
+    setState(() {
+      errorMessage = null;
+      isLoading = true;
+    });
+    await Future.delayed(Duration(seconds: 3));
+    final savedEmail = PreferenceManger().getString('user_email');
+    if (savedEmail != null && savedEmail == emailController.text.trim()) {
+      setState(() {
+        errorMessage = 'User Already Registered';
+        isLoading = false;
+      });
+    } else {
+      await PreferenceManger().setString(
+        'user_email',
+        emailController.text.trim(),
+      );
+      await PreferenceManger().setString(
+        'user_password',
+        passwordController.text.trim(),
+      );
+      await PreferenceManger().setBool('is_logged_in', true);
+      setState(() {
+        isLoading = false;
+        errorMessage = null;
+      });
+      if (!mounted) return;
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return MainScreen();
+          },
+        ),
+        (route) => false,
+      );
+    }
   }
 }

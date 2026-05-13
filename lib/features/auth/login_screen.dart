@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/datasource/local_data/preference_manger.dart';
 import 'package:news_app/core/widgets/custom_text_form_field.dart';
 import 'package:news_app/features/auth/register_screen.dart';
+import 'package:news_app/features/main/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +16,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? errorMessage;
+  bool isLoading = false;
   @override
   void dispose() {
     super.dispose();
@@ -82,14 +86,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
+                if (errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      errorMessage!,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
                 const SizedBox(height: 24),
+
                 SizedBox(
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton(
-                    child: const Text('Sign In'),
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('Sign In'),
                     onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {}
+                      if (_formKey.currentState?.validate() ?? false) {
+                        login();
+                      }
                     },
                   ),
                 ),
@@ -123,6 +140,46 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void login() async {
+    setState(() {
+      errorMessage = null;
+      isLoading = true;
+    });
+    await Future.delayed(Duration(seconds: 3));
+    final savedEmail = PreferenceManger().getString('user_email');
+    final savedPassword = PreferenceManger().getString('user_password');
+    if (savedEmail == null || savedPassword == null) {
+      setState(() {
+        errorMessage = 'No Account Found Please Register First';
+        isLoading = false;
+      });
+      return;
+    }
+    if (savedEmail != emailController.text.trim() ||
+        savedPassword != passwordController.text.trim()) {
+      setState(() {
+        errorMessage = 'Incorrect Email or Password';
+        isLoading = false;
+      });
+      return;
+    }
+    await PreferenceManger().setBool('is_logged_in', true);
+    setState(() {
+      isLoading = false;
+      errorMessage = null;
+    });
+    if (!mounted) return;
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return MainScreen();
+        },
+      ),
+      (route) => false,
     );
   }
 }
