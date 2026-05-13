@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/datasource/local_data/preference_manger.dart';
+import 'package:news_app/features/auth/login_screen.dart';
 import 'package:news_app/features/onboarding/controllers/onboarding_controller.dart';
 import 'package:news_app/features/onboarding/models/onboarding_models.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +8,19 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
+
+  Future<void> _onFinish(BuildContext context) async {
+    await PreferenceManger().setBool('onboarding_complete', true);
+    if (!context.mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return LoginScreen();
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +38,8 @@ class OnboardingScreen extends StatelessWidget {
                   return onboardingController.isLastPage
                       ? SizedBox.shrink()
                       : TextButton(
-                          onPressed: () {
-                            value.pageController.animateToPage(
-                              2,
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.decelerate,
-                            );
+                          onPressed: () async {
+                            await _onFinish(context);
                           },
                           child: Text('Skip'),
                         );
@@ -98,11 +109,15 @@ class OnboardingScreen extends StatelessWidget {
                   child: Consumer<OnboardingController>(
                     builder: (context, OnboardingController value, child) {
                       return ElevatedButton(
-                        onPressed: () {
-                          onboardingController.pageController.nextPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.decelerate,
-                          );
+                        onPressed: () async {
+                          if (!value.isLastPage) {
+                            onboardingController.pageController.nextPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.decelerate,
+                            );
+                          } else {
+                            await _onFinish(context);
+                          }
                         },
                         child: Text(value.isLastPage ? 'Get Started' : 'Next'),
                       );

@@ -1,29 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/theme/light_color.dart';
 
 ThemeData lightTheme = ThemeData(
-  primaryColor: Color(0xFFC53030),
+  primaryColor: LightColors.primaryColor,
   useMaterial3: true,
-  scaffoldBackgroundColor: Color(0xFFF5F5F5),
+
+  scaffoldBackgroundColor: LightColors.background,
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      foregroundColor: Color(0xFFC53030),
+      foregroundColor: LightColors.primaryColor,
       textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
     ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: Color(0xFFC53030),
-      foregroundColor: Color(0xFFFCFCFC),
+      backgroundColor: LightColors.primaryColor,
+      foregroundColor: LightColors.background,
       textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     ),
   ),
   appBarTheme: AppBarTheme(
-    backgroundColor: Color(0xFFFFFFFF),
+    backgroundColor: LightColors.background,
     titleTextStyle: TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,
-      color: Color(0xFF4E4B66),
+      color: LightColors.textPrimary,
     ),
-  )
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    showUnselectedLabels: true,
+    backgroundColor: LightColors.background,
+    selectedItemColor: LightColors.primaryColor,
+    unselectedItemColor: LightColors.textSecondary,
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: Color(0xFFFFFFFF),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.zero,
+      borderSide: BorderSide.none,
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.zero,
+      borderSide: BorderSide.none,
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.zero,
+      borderSide: BorderSide.none,
+    ),
+    hintStyle: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      color: LightColors.textSecondary,
+    ),
+    contentPadding: EdgeInsets.all(16),
+  ),
 );
