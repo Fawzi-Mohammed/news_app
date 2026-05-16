@@ -4,8 +4,9 @@ import 'package:news_app/core/theme/light_color.dart';
 ThemeData lightTheme = ThemeData(
   primaryColor: LightColors.primaryColor,
   useMaterial3: true,
-  progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.black),
+  progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.white),
   scaffoldBackgroundColor: LightColors.background,
+  // brightness: Brightness.dark,
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       foregroundColor: LightColors.primaryColor,
