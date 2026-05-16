@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/enums/request_states_enum.dart';
 import 'package:news_app/core/theme/light_color.dart';
+import 'package:news_app/features/home/components/view_all_component.dart';
 import 'package:news_app/features/home/controllers/home_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -35,34 +36,7 @@ class TrendingNews extends StatelessWidget {
                 ),
 
                 SizedBox(height: 6),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: .center,
-                    children: [
-                      Text(
-                        'Trending News',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        'View all',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                          decoration: TextDecoration.underline,
-                          decorationThickness: 2,
-                          decorationColor: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                ViewAllComponent(title: 'Trending News', onTap: () {}),
                 SizedBox(height: 12),
                 SizedBox(
                   height: 140,
