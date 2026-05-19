@@ -5,36 +5,40 @@ import 'package:news_app/core/enums/request_states_enum.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
 
 class HomeController extends ChangeNotifier {
-  bool topHeadLineLoading = true;
+  RequestStatesEnum topHeadLineStatus = RequestStatesEnum.loading;
   RequestStatesEnum everyThingStatus = RequestStatesEnum.loading;
   String? errorMessage;
   List<NewsArticleModel> newsTopHeadLineList = [];
   List<NewsArticleModel> newsEveryThingList = [];
   ApiService apiService = ApiService();
+  String? selectedCategory;
   HomeController() {
     getTopHeadLine();
     getEveryThing();
   }
 
-  void getTopHeadLine() async {
+  Future<void> getTopHeadLine({String? category}) async {
     try {
+      topHeadLineStatus = RequestStatesEnum.loading;
+      notifyListeners();
+
       final result = await apiService.get(
         ApiConfig.topHeadLineEndPoint,
-        params: {'country': 'us'},
+        params: {'country': 'us', 'category': category ?? 'general'},
       );
       newsTopHeadLineList = (result['articles'] as List)
           .map((e) => NewsArticleModel.fromJson(e))
           .toList();
-      topHeadLineLoading = false;
+      topHeadLineStatus = RequestStatesEnum.loaded;
       errorMessage = null;
     } on Exception catch (e) {
       errorMessage = 'Failed to load data: $e';
-      topHeadLineLoading = false;
+      topHeadLineStatus = RequestStatesEnum.error;
     }
     notifyListeners();
   }
 
-  void getEveryThing() async {
+  Future<void> getEveryThing() async {
     try {
       final Map<String, dynamic> result = await apiService.get(
         ApiConfig.everyThingEndPoint,
@@ -51,5 +55,10 @@ class HomeController extends ChangeNotifier {
       everyThingStatus = RequestStatesEnum.error;
     }
     notifyListeners();
+  }
+
+  void updateSelectedCategory(String category) {
+    selectedCategory = category;
+    getTopHeadLine(category: selectedCategory);
   }
 }

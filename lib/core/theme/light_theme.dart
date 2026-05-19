@@ -22,12 +22,13 @@ ThemeData lightTheme = ThemeData(
     ),
   ),
   appBarTheme: AppBarTheme(
-    backgroundColor: LightColors.background,
+    backgroundColor: Colors.white,
     titleTextStyle: TextStyle(
-      fontSize: 20,
+      fontSize: 16,
       fontWeight: FontWeight.bold,
       color: LightColors.textPrimary,
     ),
+    centerTitle: true,
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     showUnselectedLabels: true,
