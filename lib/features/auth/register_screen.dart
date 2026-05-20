@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preference_manger.dart';
 import 'package:news_app/core/widgets/custom_text_form_field.dart';
 import 'package:news_app/features/main/main_screen.dart';
@@ -41,7 +42,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSizes.pw16,
+            vertical: AppSizes.ph16,
+          ),
           child: Form(
             key: _formKey,
             child: Column(
@@ -49,14 +53,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Image.asset('assets/images/logo.png', height: 45),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: AppSizes.h45,
+                  ),
                 ),
-                const SizedBox(height: 40),
+                SizedBox(height: AppSizes.h40),
                 Text(
                   'Welcome to Newts',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    fontSize: AppSizes.sp20,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 CustomTextFormField(
                   controller: emailController,
                   hintText: 'usama@gmail.com',
@@ -74,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 CustomTextFormField(
                   controller: passwordController,
                   hintText: '*************',
@@ -88,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 CustomTextFormField(
                   controller: confirmPasswordController,
                   hintText: '*************',
@@ -106,17 +116,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 if (errorMessage != null)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    padding: EdgeInsets.symmetric(vertical: AppSizes.ph8),
                     child: Text(
                       errorMessage!,
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 SizedBox(
                   width: double.infinity,
-                  height: 48,
+                  height: AppSizes.h48,
                   child: ElevatedButton(
                     child: isLoading
                         ? CircularProgressIndicator()
@@ -129,14 +139,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Have an account ?',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: AppSizes.sp14,
                         fontWeight: FontWeight.w400,
                       ),
                     ),

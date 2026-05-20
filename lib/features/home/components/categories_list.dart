@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/theme/light_color.dart';
 import 'package:news_app/features/home/categories_screen.dart';
 import 'package:news_app/features/home/components/view_all_component.dart';
@@ -31,14 +32,19 @@ class CategoriesList extends StatelessWidget {
                 titleColor: Color(0xFF141414),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 16.0, top: 16, bottom: 16),
+                padding: EdgeInsets.only(
+                  left: AppSizes.pw16,
+                  top: AppSizes.ph16,
+                  bottom: AppSizes.ph16,
+                ),
                 child: SizedBox(
-                  height: 30,
+                  height: AppSizes.h30,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: categories.length,
-                    padding: EdgeInsets.only(right: 16),
-                    separatorBuilder: (context, index) => SizedBox(width: 12),
+                    padding: EdgeInsets.only(right: AppSizes.pw16),
+                    separatorBuilder: (context, index) =>
+                        SizedBox(width: AppSizes.w12),
                     itemBuilder: (context, index) {
                       bool isSelected =
                           value.selectedCategory == categories[index];
@@ -53,7 +59,7 @@ class CategoriesList extends StatelessWidget {
                                 categories[index][0].toUpperCase() +
                                     categories[index].substring(1),
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: AppSizes.sp16,
                                   fontWeight: FontWeight.w400,
                                   color: isSelected
                                       ? LightColors.primaryColor
@@ -61,9 +67,9 @@ class CategoriesList extends StatelessWidget {
                                 ),
                               ),
                               if (isSelected) ...[
-                                SizedBox(height: 4),
+                                SizedBox(height: AppSizes.ph4),
                                 Container(
-                                  height: 2,
+                                  height: AppSizes.h2,
                                   color: LightColors.primaryColor,
                                 ),
                               ],

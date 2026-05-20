@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/features/home/components/categories_list.dart';
 import 'package:news_app/features/home/components/top_headline.dart';
 import 'package:news_app/features/home/components/trending_news.dart';
@@ -21,8 +21,8 @@ class HomeScreen extends StatelessWidget {
               return CustomScrollView(
                 slivers: [
                   TrendingNews(),
-                  SliverToBoxAdapter(child: SizedBox(height: 10)),
-               
+                  SliverToBoxAdapter(child: SizedBox(height: AppSizes.h10)),
+
                   CategoriesList(),
                   TopHeadline(),
                 ],

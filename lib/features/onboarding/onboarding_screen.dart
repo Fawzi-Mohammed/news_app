@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preference_manger.dart';
 import 'package:news_app/features/auth/login_screen.dart';
 import 'package:news_app/features/onboarding/controllers/onboarding_controller.dart';
@@ -41,14 +42,20 @@ class OnboardingScreen extends StatelessWidget {
                           onPressed: () async {
                             await _onFinish(context);
                           },
-                          child: Text('Skip'),
+                          child: Text(
+                            'Skip',
+                            style: TextStyle(fontSize: AppSizes.sp16),
+                          ),
                         );
                 },
               ),
             ],
           ),
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSizes.pw16,
+              vertical: AppSizes.ph30,
+            ),
             child: Column(
               children: [
                 Expanded(
@@ -64,20 +71,20 @@ class OnboardingScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Image.asset(model.image, width: double.infinity),
-                            SizedBox(height: 24),
+                            SizedBox(height: AppSizes.ph24),
                             Text(
                               model.title,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: AppSizes.sp20,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF4E4B66),
                               ),
                             ),
-                            SizedBox(height: 12),
+                            SizedBox(height: AppSizes.ph12),
                             Text(
                               model.description,
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: AppSizes.sp12,
                                 color: Color(0xFF6E7191),
                                 fontWeight: FontWeight.w400,
                               ),
@@ -89,7 +96,7 @@ class OnboardingScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 Consumer<OnboardingController>(
                   builder: (context, OnboardingController value, child) {
                     return SmoothPageIndicator(
@@ -102,9 +109,9 @@ class OnboardingScreen extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 114),
+                SizedBox(height: AppSizes.ph112),
                 SizedBox(
-                  height: 52,
+                  height: AppSizes.h52,
                   width: double.infinity,
                   child: Consumer<OnboardingController>(
                     builder: (context, OnboardingController value, child) {
