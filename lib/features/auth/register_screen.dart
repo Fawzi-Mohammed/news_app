@@ -12,6 +12,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
@@ -23,6 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void dispose() {
     super.dispose();
+    usernameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
@@ -48,118 +50,134 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    height: AppSizes.h45,
-                  ),
-                ),
-                SizedBox(height: AppSizes.h40),
-                Text(
-                  'Welcome to Newts',
-                  style: TextStyle(
-                    fontSize: AppSizes.sp20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(height: AppSizes.ph24),
-                CustomTextFormField(
-                  controller: emailController,
-                  hintText: 'usama@gmail.com',
-                  title: 'Email',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    RegExp emailRegExp = RegExp(
-                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                    );
-                    if (!emailRegExp.hasMatch(value)) {
-                      return 'Please enter a valid email address';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: AppSizes.ph24),
-                CustomTextFormField(
-                  controller: passwordController,
-                  hintText: '*************',
-                  title: 'Password',
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please Enter Password";
-                    }
-
-                    return null;
-                  },
-                ),
-                SizedBox(height: AppSizes.ph24),
-                CustomTextFormField(
-                  controller: confirmPasswordController,
-                  hintText: '*************',
-                  title: 'Confirm Password',
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please Confirm Your Password";
-                    }
-                    if (value != passwordController.text) {
-                      return "Passwords do not match";
-                    }
-                    return null;
-                  },
-                ),
-                if (errorMessage != null)
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: AppSizes.ph8),
-                    child: Text(
-                      errorMessage!,
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-
-                SizedBox(height: AppSizes.ph24),
-                SizedBox(
-                  width: double.infinity,
-                  height: AppSizes.h48,
-                  child: ElevatedButton(
-                    child: isLoading
-                        ? CircularProgressIndicator()
-                        : const Text('Sign Up'),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        // Perform registration logic here
-                        register();
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(height: AppSizes.ph24),
-                Row(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Have an account ?',
-                      style: TextStyle(
-                        fontSize: AppSizes.sp14,
-                        fontWeight: FontWeight.w400,
+                    Center(
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        height: AppSizes.h45,
                       ),
                     ),
-                    //  const SizedBox(width: 8),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                    SizedBox(height: AppSizes.h40),
+                    Text(
+                      'Welcome to Newts',
+                      style: TextStyle(
+                        fontSize: AppSizes.sp20,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(height: AppSizes.ph24),
+                    CustomTextFormField(
+                      controller: usernameController,
+                      hintText: 'Ahmed Ibrahim',
+                      title: 'User Name',
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please Enter User Name';
+                        }
+                        return null;
                       },
-                      child: const Text('Sign In'),
+                    ),
+                    SizedBox(height: AppSizes.ph24),
+                    CustomTextFormField(
+                      controller: emailController,
+                      hintText: 'usama@gmail.com',
+                      title: 'Email',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        RegExp emailRegExp = RegExp(
+                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                        );
+                        if (!emailRegExp.hasMatch(value)) {
+                          return 'Please enter a valid email address';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: AppSizes.ph24),
+                    CustomTextFormField(
+                      controller: passwordController,
+                      hintText: '*************',
+                      title: 'Password',
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Enter Password";
+                        }
+
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: AppSizes.ph24),
+                    CustomTextFormField(
+                      controller: confirmPasswordController,
+                      hintText: '*************',
+                      title: 'Confirm Password',
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Confirm Your Password";
+                        }
+                        if (value != passwordController.text) {
+                          return "Passwords do not match";
+                        }
+                        return null;
+                      },
+                    ),
+                    if (errorMessage != null)
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: AppSizes.ph8),
+                        child: Text(
+                          errorMessage!,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+
+                    SizedBox(height: AppSizes.ph24),
+                    SizedBox(
+                      width: double.infinity,
+                      height: AppSizes.h48,
+                      child: ElevatedButton(
+                        child: isLoading
+                            ? CircularProgressIndicator()
+                            : const Text('Sign Up'),
+                        onPressed: () {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            // Perform registration logic here
+                            register();
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: AppSizes.ph24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Have an account ?',
+                          style: TextStyle(
+                            fontSize: AppSizes.sp14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        //  const SizedBox(width: 8),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Sign In'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -183,6 +201,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await PreferenceManger().setString(
         'user_email',
         emailController.text.trim(),
+      );
+      await PreferenceManger().setString(
+        'username',
+        usernameController.text.trim(),
       );
       await PreferenceManger().setString(
         'user_password',

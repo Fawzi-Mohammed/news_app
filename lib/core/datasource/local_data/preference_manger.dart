@@ -56,7 +56,7 @@ class PreferenceManger {
     return await _sharedPreferences.setStringList(key, value);
   }
 
-  Future<bool> clear() async {
-    return await _sharedPreferences.clear();
+   Future<void> clear() async {
+     await _sharedPreferences.clear();
   }
 }

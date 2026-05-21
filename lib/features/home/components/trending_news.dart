@@ -4,6 +4,7 @@ import 'package:news_app/core/enums/request_states_enum.dart';
 import 'package:news_app/core/extensions/date_time_extension.dart';
 import 'package:news_app/core/theme/light_color.dart';
 import 'package:news_app/core/widgets/custom_cached_network_image.dart';
+import 'package:news_app/features/details/details_screen.dart';
 import 'package:news_app/features/home/components/trending_news_shimmer.dart';
 import 'package:news_app/features/home/components/view_all_component.dart';
 import 'package:news_app/features/home/controllers/home_controller.dart';
@@ -71,112 +72,133 @@ class TrendingNews extends StatelessWidget {
                                     AppSizes.r8,
                                   ),
 
-                                  child: SizedBox(
-                                    width: AppSizes.w240,
-                                    child: Stack(
-                                      children: [
-                                        CustomCachedNetworkImage(
-                                          url: model.urlToImage ?? '',
-                                          width: AppSizes.w240,
-                                          height: AppSizes.h140,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailsScreen(model: model),
                                         ),
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      width: AppSizes.w240,
+                                      child: Stack(
+                                        children: [
+                                          CustomCachedNetworkImage(
+                                            url: model.urlToImage ?? '',
+                                            width: AppSizes.w240,
+                                            height: AppSizes.h140,
+                                          ),
 
-                                        Positioned.fill(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: [
-                                                  Colors.black.withValues(
-                                                    alpha: 0.5,
-                                                  ),
-                                                  Colors.black.withValues(
-                                                    alpha: 0.7,
-                                                  ),
-                                                ],
+                                          Positioned.fill(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.black.withValues(
+                                                      alpha: 0.5,
+                                                    ),
+                                                    Colors.black.withValues(
+                                                      alpha: 0.7,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Positioned(
-                                          left: AppSizes.w12,
-                                          right: AppSizes.w12,
+                                          Positioned(
+                                            left: AppSizes.w12,
+                                            right: AppSizes.w12,
 
-                                          bottom: AppSizes.h12,
-                                          child: Column(
-                                            crossAxisAlignment: .start,
-                                            children: [
-                                              Text(
-                                                model.title,
-                                                style: TextStyle(
-                                                  color: Color(0xFFFFFCFC),
-                                                  fontSize: AppSizes.sp14,
-                                                  fontWeight: FontWeight.bold,
+                                            bottom: AppSizes.h12,
+                                            child: Column(
+                                              crossAxisAlignment: .start,
+                                              children: [
+                                                Text(
+                                                  model.title,
+                                                  style: TextStyle(
+                                                    color: Color(0xFFFFFCFC),
+                                                    fontSize: AppSizes.sp14,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              SizedBox(height: AppSizes.h6),
+                                                SizedBox(height: AppSizes.h6),
 
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Row(
-                                                      children: [
-                                                        CircleAvatar(
-                                                          radius: AppSizes.r10,
-                                                          backgroundColor:
-                                                              Colors.white24,
-                                                          child: Icon(
-                                                            Icons.person,
-                                                            color: Colors.white,
-                                                            size: AppSizes.sp12,
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: AppSizes.w4,
-                                                        ),
-                                                        Expanded(
-                                                          child: Text(
-                                                            model.author ?? '',
-                                                            style: TextStyle(
-                                                              fontSize:
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Row(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius:
+                                                                AppSizes.r10,
+                                                            backgroundColor:
+                                                                Colors.white24,
+                                                            child: Icon(
+                                                              Icons.person,
+                                                              color:
+                                                                  Colors.white,
+                                                              size:
                                                                   AppSizes.sp12,
-                                                              color: Color(
-                                                                0xFFFFFCFC,
-                                                              ),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
                                                             ),
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
                                                           ),
-                                                        ),
-                                                      ],
+                                                          SizedBox(
+                                                            width: AppSizes.w4,
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              model.author ??
+                                                                  '',
+                                                              style: TextStyle(
+                                                                fontSize:
+                                                                    AppSizes
+                                                                        .sp12,
+                                                                color: Color(
+                                                                  0xFFFFFCFC,
+                                                                ),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                              ),
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  SizedBox(width: AppSizes.w6),
-                                                  Text(
-                                                    model.publishedAt
-                                                        .formateDateTime(),
+                                                    SizedBox(
+                                                      width: AppSizes.w6,
+                                                    ),
+                                                    Text(
+                                                      model.publishedAt
+                                                          .formateDateTime(),
 
-                                                    style: TextStyle(
-                                                      fontSize: AppSizes.sp12,
-                                                      color: Color(0xFFFFFCFC),
-                                                      fontWeight:
-                                                          FontWeight.w400,
+                                                      style: TextStyle(
+                                                        fontSize: AppSizes.sp12,
+                                                        color: Color(
+                                                          0xFFFFFCFC,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );

@@ -1,61 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/theme/light_color.dart';
 
 ThemeData lightTheme = ThemeData(
-  primaryColor: LightColors.primaryColor,
   useMaterial3: true,
-  progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.white),
+  fontFamily: 'TimesNewRoman',
+  brightness: Brightness.light,
   scaffoldBackgroundColor: LightColors.background,
-  // brightness: Brightness.dark,
-  textButtonTheme: TextButtonThemeData(
-    style: TextButton.styleFrom(
-      foregroundColor: LightColors.primaryColor,
-      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-    ),
-  ),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: LightColors.primaryColor,
-      foregroundColor: LightColors.background,
-      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-    ),
-  ),
+  primaryColor: LightColors.primaryColor,
   appBarTheme: AppBarTheme(
-    backgroundColor: Colors.white,
+    backgroundColor: const Color(0xFFFFFFFF),
     titleTextStyle: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
+      fontSize: AppSizes.sp16,
+      fontWeight: FontWeight.w700,
       color: LightColors.textPrimary,
     ),
     centerTitle: true,
   ),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    showUnselectedLabels: true,
-    backgroundColor: LightColors.background,
-    selectedItemColor: LightColors.primaryColor,
-    unselectedItemColor: LightColors.textSecondary,
+  progressIndicatorTheme: const ProgressIndicatorThemeData(color: Colors.white),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: LightColors.primaryColor,
+      foregroundColor: const Color(0xFFFFFCFC),
+      textStyle: TextStyle(
+        fontSize: AppSizes.sp16,
+        fontWeight: FontWeight.w400,
+      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      minimumSize: Size.fromHeight(AppSizes.h52),
+    ),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(foregroundColor: LightColors.primaryColor),
   ),
   inputDecorationTheme: InputDecorationTheme(
+    hintStyle: const TextStyle(color: Color(0xFF9E9E9E)),
     filled: true,
-    fillColor: Color(0xFFFFFFFF),
-    border: OutlineInputBorder(
+    fillColor: const Color(0xFFFFFFFF),
+    focusColor: const Color(0xFFD1DAD6),
+    errorBorder: const OutlineInputBorder(
       borderRadius: BorderRadius.zero,
-      borderSide: BorderSide.none,
+      borderSide: BorderSide(color: Colors.red, width: 0.5),
     ),
-    enabledBorder: OutlineInputBorder(
+    focusedBorder: const OutlineInputBorder(
       borderRadius: BorderRadius.zero,
-      borderSide: BorderSide.none,
+      borderSide: BorderSide(color: Color(0xFFD1DAD6), width: 0.5),
     ),
-    focusedBorder: OutlineInputBorder(
+    enabledBorder: const OutlineInputBorder(
       borderRadius: BorderRadius.zero,
-      borderSide: BorderSide.none,
+      borderSide: BorderSide(color: Color(0xFFD1DAD6), width: 0.5),
     ),
-    hintStyle: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      color: LightColors.textSecondary,
+    border: const OutlineInputBorder(
+      borderRadius: BorderRadius.zero,
+      borderSide: BorderSide(color: Color(0xFFD1DAD6), width: 0.5),
     ),
-    contentPadding: EdgeInsets.all(16),
+    contentPadding: EdgeInsets.all(AppSizes.pw16),
   ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: LightColors.background,
+    type: BottomNavigationBarType.fixed,
+    selectedItemColor: LightColors.primaryColor,
+    unselectedItemColor: LightColors.textSecondary,
+    showUnselectedLabels: true,
+  ),
+  dividerTheme: const DividerThemeData(color: Color(0xFFD1DAD6)),
 );
