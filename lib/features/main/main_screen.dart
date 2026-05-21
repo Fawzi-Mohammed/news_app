@@ -38,8 +38,7 @@ class _MainScreenState extends State<MainScreen> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            
-            icon: Icon(Icons.search_off_outlined),
+            icon: Icon(Icons.search_outlined),
             label: "Search",
           ),
           BottomNavigationBarItem(

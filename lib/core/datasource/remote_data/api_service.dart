@@ -3,7 +3,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:news_app/core/datasource/remote_data/api_config.dart';
 
-class ApiService {
+abstract class BaseApiService {
+  Future<dynamic> get(String endPoint, {Map<String, String>? params});
+}
+
+class ApiService extends BaseApiService {
+  @override
   Future<dynamic> get(String endPoint, {Map<String, String>? params}) async {
     final url = Uri.https(ApiConfig.baseUrl, 'v2/$endPoint', {
       'apiKey': ApiConfig.apiKey,

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/core/datasource/remote_data/api_config.dart';
 import 'package:news_app/core/datasource/remote_data/api_service.dart';
 import 'package:news_app/core/enums/request_states_enum.dart';
+import 'package:news_app/core/mixins/safe_notify_mixin.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
+import 'package:news_app/features/home/repos/news_repository.dart';
 
-class HomeController extends ChangeNotifier {
+class HomeController extends ChangeNotifier with SafeNotify {
   RequestStatesEnum topHeadLineStatus = RequestStatesEnum.loading;
   RequestStatesEnum everyThingStatus = RequestStatesEnum.loading;
   String? errorMessage;
@@ -12,7 +13,8 @@ class HomeController extends ChangeNotifier {
   List<NewsArticleModel> newsEveryThingList = [];
   ApiService apiService = ApiService();
   String? selectedCategory;
-  HomeController() {
+  final BaseNewsRepository newsRepository;
+  HomeController({required this.newsRepository}) {
     getTopHeadLine();
     getEveryThing();
   }
@@ -20,41 +22,30 @@ class HomeController extends ChangeNotifier {
   Future<void> getTopHeadLine({String? category}) async {
     try {
       topHeadLineStatus = RequestStatesEnum.loading;
-      notifyListeners();
-
-      final result = await apiService.get(
-        ApiConfig.topHeadLineEndPoint,
-        params: {'country': 'us', 'category': category ?? 'general'},
+      safeNotify();
+      newsTopHeadLineList = await newsRepository.getTopHeadLine(
+        category: category,
       );
-      newsTopHeadLineList = (result['articles'] as List)
-          .map((e) => NewsArticleModel.fromJson(e))
-          .toList();
+
       topHeadLineStatus = RequestStatesEnum.loaded;
       errorMessage = null;
     } on Exception catch (e) {
       errorMessage = 'Failed to load data: $e';
       topHeadLineStatus = RequestStatesEnum.error;
     }
-    notifyListeners();
+    safeNotify();
   }
 
   Future<void> getEveryThing() async {
     try {
-      final Map<String, dynamic> result = await apiService.get(
-        ApiConfig.everyThingEndPoint,
-        params: {'q': 'sports', 'language': 'ar'},
-      );
-
-      newsEveryThingList = (result['articles'] as List)
-          .map((e) => NewsArticleModel.fromJson(e))
-          .toList();
+      newsEveryThingList = await newsRepository.getEveryThing();
       everyThingStatus = RequestStatesEnum.loaded;
       errorMessage = null;
     } on Exception catch (e) {
       errorMessage = 'Failed to load data: $e';
       everyThingStatus = RequestStatesEnum.error;
     }
-    notifyListeners();
+    safeNotify();
   }
 
   void updateSelectedCategory(String category) {
