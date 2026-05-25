@@ -24,14 +24,12 @@ void appMain() {
 }
 
 void main() {
-  // Set to use Android Photo Picker.
-  // #docregion photo-picker-example
+  
   final ImagePickerPlatform imagePickerImplementation =
       ImagePickerPlatform.instance;
   if (imagePickerImplementation is ImagePickerAndroid) {
     imagePickerImplementation.useAndroidPhotoPicker = true;
   }
-  // #enddocregion photo-picker-example
   runApp(const MyApp());
 }
 
@@ -108,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
             source: source,
             maxDuration: const Duration(seconds: 10),
           );
-          files = <XFile>[if (file != null) file];
+          files = <XFile>[?file];
         }
         if (files.isNotEmpty && context.mounted) {
           _showPickedSnackBar(context, files);

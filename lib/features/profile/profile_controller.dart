@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:news_app/core/datasource/local_data/preference_manger.dart';
+import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/mixins/safe_notify_mixin.dart';
 
 class ProfileController extends ChangeNotifier with SafeNotify {
-  static const String _profileImagePathKey = 'profile_image_path';
-
   XFile? selectedImage;
 
   String? userName;
@@ -23,19 +21,18 @@ class ProfileController extends ChangeNotifier with SafeNotify {
     }
 
     selectedImage = image;
-    await PreferenceManger().setString(_profileImagePathKey, image.path);
+    await UserRepository().updateUser(profileImagePath: image.path);
 
     safeNotify();
   }
 
   void getUserData() {
-    userName = PreferenceManger().getString('username') ?? '';
-    userEmail = PreferenceManger().getString('user_email') ?? '';
-    countryName = PreferenceManger().getString('country_name');
-    countryCode = PreferenceManger().getString('country_code');
-    final String? savedImagePath = PreferenceManger().getString(
-      _profileImagePathKey,
-    );
+    final user = UserRepository().getUser();
+    userName = user?.name ?? '';
+    userEmail = user?.email ?? '';
+    countryName = user?.countryName;
+    countryCode = user?.countryCode;
+    final String? savedImagePath = user?.profileImagePath;
     if (savedImagePath != null &&
         savedImagePath.isNotEmpty &&
         File(savedImagePath).existsSync()) {
@@ -47,10 +44,9 @@ class ProfileController extends ChangeNotifier with SafeNotify {
   }
 
   Future<void> saveCountry(Country selectedCountry) async {
-    await PreferenceManger().setString('country_name', selectedCountry.name);
-    await PreferenceManger().setString(
-      'country_code',
-      selectedCountry.countryCode,
+    await UserRepository().updateUser(
+      countryName: selectedCountry.name,
+      countryCode: selectedCountry.countryCode,
     );
     countryName = selectedCountry.name;
     countryCode = selectedCountry.countryCode;

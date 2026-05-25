@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
-import 'package:news_app/core/datasource/local_data/preference_manger.dart';
+import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/theme/light_color.dart';
 import 'package:news_app/core/widgets/custom_text_form_field.dart';
 
@@ -30,20 +30,18 @@ class _ProfileInfoBottomSheetState extends State<ProfileInfoBottomSheet> {
   }
 
   void _loadUserData() {
-    usernameController.text = PreferenceManger().getString('username') ?? '';
-    emailController.text = PreferenceManger().getString('user_email') ?? '';
+    final user = UserRepository().getUser();
+    usernameController.text = user?.name ?? '';
+    emailController.text = user?.email ?? '';
   }
 
   Future<void> _saveUserData() async {
     if (keyForm.currentState?.validate() ?? false) {
-      await PreferenceManger().setString(
-        'username',
-        usernameController.text.trim(),
+      await UserRepository().updateUser(
+        name: usernameController.text.trim(),
+        email: emailController.text.trim(),
       );
-      await PreferenceManger().setString(
-        'user_email',
-        emailController.text.trim(),
-      );
+
       if (!mounted) {
         return;
       }

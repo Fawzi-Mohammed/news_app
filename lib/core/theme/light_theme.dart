@@ -34,7 +34,11 @@ ThemeData lightTheme = ThemeData(
     style: TextButton.styleFrom(foregroundColor: LightColors.primaryColor),
   ),
   inputDecorationTheme: InputDecorationTheme(
-    hintStyle: const TextStyle(color: Color(0xFF9E9E9E)),
+    hintStyle: TextStyle(
+      color: Color(0xFF363636),
+      fontSize: AppSizes.sp16,
+      fontWeight: FontWeight.w400,
+    ),
     filled: true,
     fillColor: const Color(0xFFFFFFFF),
     focusColor: const Color(0xFFD1DAD6),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preference_manger.dart';
+import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/widgets/custom_text_form_field.dart';
 import 'package:news_app/features/main/main_screen.dart';
 
@@ -191,40 +192,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
       isLoading = true;
     });
     await Future.delayed(Duration(seconds: 3));
-    final savedEmail = PreferenceManger().getString('user_email');
-    if (savedEmail != null && savedEmail == emailController.text.trim()) {
+    final error = await UserRepository().register(
+      name: usernameController.text.trim(),
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+    if (error != null) {
       setState(() {
-        errorMessage = 'User Already Registered';
+        errorMessage = error;
         isLoading = false;
       });
-    } else {
-      await PreferenceManger().setString(
-        'user_email',
-        emailController.text.trim(),
-      );
-      await PreferenceManger().setString(
-        'username',
-        usernameController.text.trim(),
-      );
-      await PreferenceManger().setString(
-        'user_password',
-        passwordController.text.trim(),
-      );
-      await PreferenceManger().setBool('is_logged_in', true);
-      setState(() {
-        isLoading = false;
-        errorMessage = null;
-      });
-      if (!mounted) return;
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return MainScreen();
-          },
-        ),
-        (route) => false,
-      );
+      return;
     }
+    await PreferenceManger().setBool('is_logged_in', true);
+    setState(() {
+      isLoading = false;
+      errorMessage = null;
+    });
+    if (!mounted) return;
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return MainScreen();
+        },
+      ),
+      (route) => false,
+    );
   }
 }

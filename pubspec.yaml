@@ -44,9 +44,12 @@ dependencies:
   flutter_screenutil: ^5.9.3
   country_picker: ^2.0.27
   image_picker: ^1.2.0
+  hive_ce_flutter: ^2.3.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_ce_generator: ^1.11.2
+  build_runner: ^2.15.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

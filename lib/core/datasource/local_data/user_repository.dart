@@ -1,0 +1,94 @@
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
+import 'package:news_app/core/constants/constants.dart';
+import 'package:news_app/core/models/user_model.dart';
+
+class UserRepository {
+  UserRepository._internal();
+  static final _instance = UserRepository._internal();
+  factory UserRepository() => _instance;
+  Box<UserModel>? _userBox;
+  Future<void> init() async {
+    await Hive.initFlutter();
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(UserModelAdapter());
+    }
+    _userBox = await Hive.openBox<UserModel>(Constants.userBox);
+  }
+
+  Future<void> saveUser(UserModel user) async {
+    await userBox.put(Constants.currentUser, user);
+  }
+
+  UserModel? getUser() {
+    return userBox.get(Constants.currentUser);
+  }
+
+  Box<UserModel> get userBox {
+    if (_userBox == null) {
+      throw Exception('UserRepository not initialized');
+    } else {
+      return _userBox!;
+    }
+  }
+
+  Future<void> deleteUser() async {
+    await userBox.delete(Constants.currentUser);
+  }
+
+  Future<void> close() async {
+    await userBox.close();
+  }
+
+  Future<void> clear() async {
+    await userBox.clear();
+  }
+
+  Future<void> updateUser({
+    String? name,
+    String? email,
+    String? password,
+    String? countryName,
+    String? countryCode,
+    String? profileImagePath,
+  }) async {
+    final user = getUser();
+    if (user != null) {
+      final updatedUser = user.copyWith(
+        name: name,
+        email: email,
+        password: password,
+        countryName: countryName,
+        countryCode: countryCode,
+        profileImagePath: profileImagePath,
+      );
+      await saveUser(updatedUser);
+    }
+  }
+
+  String? login(String email, String password) {
+    final user = getUser();
+    if (user == null) {
+      return 'No Account Found Please Register First';
+    }
+    if (user.email != email || user.password != password) {
+      return 'Incorrect Email or Password';
+    }
+    return null;
+  }
+
+  Future<String?> register({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    final user = getUser();
+    if (user != null) {
+      return 'User Already Exists';
+    }
+
+    final newUser = UserModel(name: name, email: email, password: password);
+
+    await saveUser(newUser);
+    return null;
+  }
+}

@@ -71,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                         SizedBox(height: AppSizes.ph8),
                         Center(
                           child: Text(
-                            PreferenceManger().getString('username') ?? '',
+                            controller.userName ?? '',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: AppSizes.sp16,
@@ -124,7 +124,10 @@ class ProfileScreen extends StatelessWidget {
                           'Logout',
                           'assets/images/logout.svg',
                           () async {
-                            await PreferenceManger().clear();
+                            await PreferenceManger().setBool(
+                              'is_logged_in',
+                              false,
+                            );
                             if (!context.mounted) {
                               return;
                             }
