@@ -15,7 +15,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextEditingController controller;
   final int? maxLines;
   final String hintText;
-  final Function(String?)? validator;
+  final FormFieldValidator<String>? validator;
   final String title;
   final bool obscureText;
 
@@ -34,9 +34,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         SizedBox(height: AppSizes.ph8),
 
         TextFormField(
-          validator: widget.validator != null
-              ? (String? value) => widget.validator!(value)
-              : null,
+          validator: widget.validator,
           maxLines: widget.maxLines,
           style: Theme.of(context).textTheme.labelMedium,
           controller: widget.controller,
@@ -50,8 +48,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                       });
                     },
                     icon: _isVisible
-                        ? Icon(Icons.visibility)
-                        : Icon(Icons.visibility_off),
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off),
                   )
                 : null,
           ),

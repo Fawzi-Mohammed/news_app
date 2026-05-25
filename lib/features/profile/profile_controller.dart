@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:news_app/core/datasource/local_data/preference_manger.dart';
 import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/mixins/safe_notify_mixin.dart';
 
 class ProfileController extends ChangeNotifier with SafeNotify {
+  static const String _profileImagePathKey = 'profile_image_path';
+
   XFile? selectedImage;
 
   String? userName;
@@ -21,7 +24,7 @@ class ProfileController extends ChangeNotifier with SafeNotify {
     }
 
     selectedImage = image;
-    await UserRepository().updateUser(profileImagePath: image.path);
+    await PreferenceManger().setString(_profileImagePathKey, image.path);
 
     safeNotify();
   }
@@ -32,7 +35,9 @@ class ProfileController extends ChangeNotifier with SafeNotify {
     userEmail = user?.email ?? '';
     countryName = user?.countryName;
     countryCode = user?.countryCode;
-    final String? savedImagePath = user?.profileImagePath;
+    final String? savedImagePath = PreferenceManger().getString(
+      _profileImagePathKey,
+    );
     if (savedImagePath != null &&
         savedImagePath.isNotEmpty &&
         File(savedImagePath).existsSync()) {

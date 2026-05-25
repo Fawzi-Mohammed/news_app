@@ -12,10 +12,10 @@ class HomeController extends ChangeNotifier with SafeNotify {
   List<NewsArticleModel> newsTopHeadLineList = [];
   List<NewsArticleModel> newsEveryThingList = [];
   ApiService apiService = ApiService();
-  String? selectedCategory;
+  String? selectedCategory = 'general';
   final BaseNewsRepository newsRepository;
   HomeController({required this.newsRepository}) {
-    getTopHeadLine();
+    getTopHeadLine(category: selectedCategory);
     getEveryThing();
   }
 

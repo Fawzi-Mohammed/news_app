@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/user_repository.dart';
+import 'package:news_app/core/theme/app_text_styles.dart';
 import 'package:news_app/core/theme/light_color.dart';
+import 'package:news_app/core/validation/app_validators.dart';
 import 'package:news_app/core/widgets/custom_text_form_field.dart';
 
 class ProfileInfoBottomSheet extends StatefulWidget {
@@ -91,42 +93,20 @@ class _ProfileInfoBottomSheetState extends State<ProfileInfoBottomSheet> {
                       ),
                     ),
                     SizedBox(height: AppSizes.ph16),
-                    Text(
-                      'Profile Info',
-                      style: TextStyle(
-                        fontSize: AppSizes.sp16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                    Text('Profile Info', style: AppTextStyles.fieldValue),
                     SizedBox(height: AppSizes.ph16),
                     CustomTextFormField(
                       controller: usernameController,
                       hintText: 'Ahmed Ibrahim',
                       title: 'User Name',
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please Enter User Name';
-                        }
-                        return null;
-                      },
+                      validator: AppValidators.userName,
                     ),
                     SizedBox(height: AppSizes.ph16),
                     CustomTextFormField(
                       controller: emailController,
                       hintText: 'usama@gmail.com',
                       title: 'Email',
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please Enter Email';
-                        }
-                        final RegExp emailRegExp = RegExp(
-                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                        );
-                        if (!emailRegExp.hasMatch(value)) {
-                          return 'Please Enter Valid Email';
-                        }
-                        return null;
-                      },
+                      validator: AppValidators.email,
                     ),
                     SizedBox(height: AppSizes.h40),
                     ElevatedButton(

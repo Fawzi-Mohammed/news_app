@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preference_manger.dart';
 import 'package:news_app/core/datasource/local_data/user_repository.dart';
+import 'package:news_app/core/theme/app_text_styles.dart';
+import 'package:news_app/core/validation/app_validators.dart';
 import 'package:news_app/core/widgets/custom_text_form_field.dart';
 import 'package:news_app/features/auth/register_screen.dart';
 import 'package:news_app/features/main/main_screen.dart';
@@ -62,28 +64,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: AppSizes.h40),
                     Text(
                       'Welcome to Newts',
-                      style: TextStyle(
-                        fontSize: AppSizes.sp20,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: AppTextStyles.screenHeadline,
                     ),
                     SizedBox(height: AppSizes.ph24),
                     CustomTextFormField(
                       controller: emailController,
                       hintText: 'usama@gmail.com',
                       title: 'Email',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        RegExp emailRegExp = RegExp(
-                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                        );
-                        if (!emailRegExp.hasMatch(value)) {
-                          return 'Please enter a valid email address';
-                        }
-                        return null;
-                      },
+                      validator: AppValidators.email,
                     ),
                     SizedBox(height: AppSizes.ph24),
                     CustomTextFormField(
@@ -91,20 +79,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: '*************',
                       title: 'Password',
                       obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please Enter Password";
-                        }
-
-                        return null;
-                      },
+                      validator: AppValidators.password,
                     ),
                     if (errorMessage != null)
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: AppSizes.ph8),
                         child: Text(
                           errorMessage!,
-                          style: TextStyle(color: Colors.red),
+                          style: AppTextStyles.errorText,
                         ),
                       ),
                     SizedBox(height: AppSizes.ph24),
@@ -129,10 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Text(
                           'Don’t have an account ?',
-                          style: TextStyle(
-                            fontSize: AppSizes.sp14,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: AppTextStyles.bodyRegular,
                         ),
                         //  const SizedBox(width: 8),
                         TextButton(
@@ -140,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RegisterScreen(),
+                                builder: (context) => const RegisterScreen(),
                               ),
                             );
                           },
@@ -163,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
       errorMessage = null;
       isLoading = true;
     });
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
     final String? error = UserRepository().login(
       emailController.text.trim(),
       passwordController.text.trim(),
@@ -186,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return MainScreen();
+          return const MainScreen();
         },
       ),
       (route) => false,

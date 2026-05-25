@@ -31,7 +31,7 @@ class UserRepository {
     }
   }
 
-  Future<void> deleteUser() async {
+  Future<void> delete() async {
     await userBox.delete(Constants.currentUser);
   }
 
@@ -39,7 +39,7 @@ class UserRepository {
     await userBox.close();
   }
 
-  Future<void> clear() async {
+  Future<void> clearAll() async {
     await userBox.clear();
   }
 
@@ -49,7 +49,6 @@ class UserRepository {
     String? password,
     String? countryName,
     String? countryCode,
-    String? profileImagePath,
   }) async {
     final user = getUser();
     if (user != null) {
@@ -59,7 +58,6 @@ class UserRepository {
         password: password,
         countryName: countryName,
         countryCode: countryCode,
-        profileImagePath: profileImagePath,
       );
       await saveUser(updatedUser);
     }
@@ -76,14 +74,14 @@ class UserRepository {
     return null;
   }
 
-  Future<String?> register({
+  Future<String?> signUp({
     required String name,
     required String email,
     required String password,
   }) async {
     final user = getUser();
     if (user != null) {
-      return 'User Already Exists';
+      return 'User Already Exists Please Login';
     }
 
     final newUser = UserModel(name: name, email: email, password: password);

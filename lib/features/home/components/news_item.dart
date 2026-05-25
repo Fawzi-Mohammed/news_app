@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/extensions/date_time_extension.dart';
+import 'package:news_app/core/widgets/bookmark_button.dart';
 import 'package:news_app/core/widgets/custom_cached_network_image.dart';
-import 'package:news_app/core/widgets/custom_svg_picture.dart';
 import 'package:news_app/features/details/details_screen.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
 
@@ -82,10 +82,9 @@ class NewsItem extends StatelessWidget {
                           ),
                         ),
 
-                        CustomSvgPicture.withColorFilter(
-                          path: 'assets/images/bookmark_icon.svg',
-                          width: AppSizes.w12,
-                          height: AppSizes.h15,
+                        BookmarkButton(
+                          article: model,
+                          size: 20,
                         ),
                       ],
                     ),
