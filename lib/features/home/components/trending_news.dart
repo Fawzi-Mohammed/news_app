@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
-import 'package:news_app/core/enums/request_states_enum.dart';
+import 'package:news_app/core/enums/request_status_enum.dart';
 import 'package:news_app/core/extensions/date_time_extension.dart';
 import 'package:news_app/core/theme/light_color.dart';
 import 'package:news_app/core/widgets/bookmark_button.dart';
@@ -8,8 +9,7 @@ import 'package:news_app/core/widgets/custom_cached_network_image.dart';
 import 'package:news_app/features/details/details_screen.dart';
 import 'package:news_app/features/home/components/trending_news_shimmer.dart';
 import 'package:news_app/features/home/components/view_all_component.dart';
-import 'package:news_app/features/home/controllers/home_controller.dart';
-import 'package:provider/provider.dart';
+import 'package:news_app/features/home/cubit/home_cubit.dart';
 
 class TrendingNews extends StatelessWidget {
   const TrendingNews({super.key});
@@ -47,26 +47,25 @@ class TrendingNews extends StatelessWidget {
                   SizedBox(height: AppSizes.ph12),
                   SizedBox(
                     height: AppSizes.h140,
-                    child: Consumer<HomeController>(
-                      builder: (context, HomeController controller, child) {
-                        switch (controller.everyThingStatus) {
-                          case RequestStatesEnum.loading:
+                    child: BlocBuilder<HomeCubit, HomeState>(
+                      builder: (context, state) {
+                        switch (state.everyThingStatus) {
+                          case RequestStatusEnum.loading:
                             return TrendingNewsShimmer();
-                          case RequestStatesEnum.error:
+                          case RequestStatusEnum.error:
                             return Center(
-                              child: Text(controller.errorMessage!),
+                              child: Text(state.errorMessage ?? 'Error'),
                             );
-                          case RequestStatesEnum.loaded:
+                          case RequestStatusEnum.loaded:
                             return ListView.separated(
                               padding: EdgeInsets.only(left: AppSizes.pw16),
                               scrollDirection: Axis.horizontal,
-                              itemCount: controller.newsEveryThingList.length,
+                              itemCount: state.newsEveryThingList.length,
                               separatorBuilder: (context, index) {
                                 return SizedBox(width: AppSizes.w12);
                               },
                               itemBuilder: (context, index) {
-                                final model =
-                                    controller.newsEveryThingList[index];
+                                final model = state.newsEveryThingList[index];
 
                                 return ClipRRect(
                                   borderRadius: BorderRadiusGeometry.circular(

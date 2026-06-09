@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/core/enums/request_states_enum.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/core/enums/request_status_enum.dart';
 import 'package:news_app/features/home/components/news_item.dart';
-import 'package:news_app/features/home/controllers/home_controller.dart';
+import 'package:news_app/features/home/cubit/home_cubit.dart';
 import 'package:news_app/features/home/widgets/categories_news_shimmer.dart';
 import 'package:news_app/features/home/widgets/category_tabs.dart';
-import 'package:provider/provider.dart';
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({super.key});
@@ -13,33 +13,37 @@ class CategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Categories')),
-      body: Consumer<HomeController>(
-        builder: (context, HomeController value, child) {
-          switch (value.topHeadLineStatus) {
-            case RequestStatesEnum.loading:
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          switch (state.newsTopHeadLineStatus) {
+            case RequestStatusEnum.loading:
               return Column(
                 children: [
                   CategoryTabs(
-                    selectedCategory: value.selectedCategory,
-                    onCategorySelected: value.updateSelectedCategory,
+                    selectedCategory: state.selectedCategory,
+                    onCategorySelected: context
+                        .read<HomeCubit>()
+                        .updateSelectedCategory,
                   ),
                   Expanded(child: CategoriesNewsShimmer()),
                 ],
               );
-            case RequestStatesEnum.error:
-              return Center(child: Text(value.errorMessage!));
-            case RequestStatesEnum.loaded:
+            case RequestStatusEnum.error:
+              return Center(child: Text(state.errorMessage ?? 'Error'));
+            case RequestStatusEnum.loaded:
               return Column(
                 children: [
                   CategoryTabs(
-                    selectedCategory: value.selectedCategory,
-                    onCategorySelected: value.updateSelectedCategory,
+                    selectedCategory: state.selectedCategory,
+                    onCategorySelected: context
+                        .read<HomeCubit>()
+                        .updateSelectedCategory,
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: value.newsTopHeadLineList.length,
+                      itemCount: state.newsTopHeadLineList.length,
                       itemBuilder: (context, index) {
-                        final model = value.newsTopHeadLineList[index];
+                        final model = state.newsTopHeadLineList[index];
                         return NewsItem(model: model);
                       },
                     ),
