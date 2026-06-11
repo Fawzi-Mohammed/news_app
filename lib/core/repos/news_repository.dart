@@ -39,6 +39,7 @@ class NewsRepository extends BaseNewsRepository {
   }) async {
     final Map<String, dynamic> result = await apiService.get(
       ApiConfig.topHeadLineEndPoint,
+      ApiConfig.newsBaseUrl,
       params: {'country': 'us', 'category': category},
     );
 
@@ -49,6 +50,7 @@ class NewsRepository extends BaseNewsRepository {
   Future<List<NewsArticleModel>> getEveryThing({String? query = 'news'}) async {
     final Map<String, dynamic> result = await apiService.get(
       ApiConfig.everyThingEndPoint,
+      ApiConfig.newsBaseUrl,
       params: {'q': query},
     );
 

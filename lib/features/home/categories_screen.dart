@@ -16,6 +16,7 @@ class CategoriesScreen extends StatelessWidget {
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           switch (state.newsTopHeadLineStatus) {
+            case RequestStatusEnum.initial:
             case RequestStatusEnum.loading:
               return Column(
                 children: [

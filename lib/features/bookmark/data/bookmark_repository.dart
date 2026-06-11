@@ -27,18 +27,23 @@ class BookmarkRepository {
   /// Add a news article to bookmarks
   /// Uses article URL as unique key to prevent duplicates
   Future<void> addBookmark(NewsArticleModel article) async {
+    final articleUrl = article.url;
+    if (articleUrl == null || articleUrl.isEmpty) {
+      throw Exception('Cannot bookmark article without URL');
+    }
+
     final bookmark = BookmarkModel(
       author: article.author,
       title: article.title,
       description: article.description,
-      url: article.url ?? '',
+      url: articleUrl,
       urlToImage: article.urlToImage,
       publishedAt: article.publishedAt,
       content: article.content,
       bookmarkedAt: DateTime.now(),
     );
 
-    await bookmarkBox.put(article.url, bookmark);
+    await bookmarkBox.put(articleUrl, bookmark);
   }
 
   /// Remove a bookmark by article URL
@@ -89,15 +94,14 @@ class BookmarkRepository {
     final lowercaseQuery = query.toLowerCase();
 
     return bookmarkBox.values.where((bookmark) {
-        final titleMatch = bookmark.title.toLowerCase().contains(lowercaseQuery);
-        final descriptionMatch =
-            bookmark.description?.toLowerCase().contains(lowercaseQuery) ?? false;
-        final authorMatch =
-            bookmark.author?.toLowerCase().contains(lowercaseQuery) ?? false;
+      final titleMatch = bookmark.title.toLowerCase().contains(lowercaseQuery);
+      final descriptionMatch =
+          bookmark.description?.toLowerCase().contains(lowercaseQuery) ?? false;
+      final authorMatch =
+          bookmark.author?.toLowerCase().contains(lowercaseQuery) ?? false;
 
-        return titleMatch || descriptionMatch || authorMatch;
-      }).toList()
-      ..sort((a, b) => b.bookmarkedAt.compareTo(a.bookmarkedAt));
+      return titleMatch || descriptionMatch || authorMatch;
+    }).toList()..sort((a, b) => b.bookmarkedAt.compareTo(a.bookmarkedAt));
   }
 
   /// Convert BookmarkModel to NewsArticleModel

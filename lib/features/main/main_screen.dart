@@ -66,7 +66,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-      body: _screens[_currentIndex],
+      body: IndexedStack(index: _currentIndex, children: _screens),
     );
   }
 }

@@ -1,30 +1,70 @@
-import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 
 part 'user_model.g.dart';
 
 @HiveType(typeId: 0)
 class UserModel {
   @HiveField(0)
-  final String? name;
+  String? name;
+
   @HiveField(1)
-  final String? email;
+  String? email;
+
   @HiveField(2)
-  final String? password;
+  String? password;
+
   @HiveField(3)
-  final String? countryName;
+  String? countryName;
+
   @HiveField(4)
-  final String? countryCode;
+  String? countryCode;
+
   @HiveField(5)
-  final String? profileImagePath;
+  String? accessToken;
+
+  @HiveField(6)
+  String? refreshToken;
 
   UserModel({
     required this.name,
-    required this.email,
+    this.email,
     this.password,
     this.countryName,
     this.countryCode,
-    this.profileImagePath,
+    this.accessToken,
+    this.refreshToken,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'email': email,
+      'password': password,
+      'countryName': countryName,
+      'countryCode': countryCode,
+    };
+  }
+
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      name: map['name'] as String,
+      email: map['email'] as String,
+      password: map['password'] as String,
+      countryName: map['countryName'] as String,
+      countryCode: map['countryCode'] as String,
+    );
+  }
+
+  factory UserModel.fromAuthResponse(
+    Map<String, dynamic> json,
+    String username,
+  ) {
+    return UserModel(
+      name: username,
+      accessToken: json['accessToken'],
+      refreshToken: json['refreshToken'],
+    );
+  }
 
   UserModel copyWith({
     String? name,
@@ -32,7 +72,6 @@ class UserModel {
     String? password,
     String? countryName,
     String? countryCode,
-    String? profileImagePath,
   }) {
     return UserModel(
       name: name ?? this.name,
@@ -40,7 +79,11 @@ class UserModel {
       password: password ?? this.password,
       countryName: countryName ?? this.countryName,
       countryCode: countryCode ?? this.countryCode,
-      profileImagePath: profileImagePath ?? this.profileImagePath,
     );
+  }
+
+  @override
+  String toString() {
+    return 'UserModel{name: $name, email: $email, password: $password, countryName: $countryName, countryCode: $countryCode, accessToken: $accessToken, refreshToken: $refreshToken}';
   }
 }

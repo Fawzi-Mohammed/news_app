@@ -117,6 +117,7 @@ class ProfileScreen extends StatelessWidget {
                       'assets/images/logout.svg',
                       () async {
                         await UserRepository().delete();
+
                         await PreferenceManger().clear();
                         if (!context.mounted) {
                           return;

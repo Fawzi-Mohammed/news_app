@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:news_app/core/enums/request_status_enum.dart';
 import 'package:news_app/features/bookmark/data/bookmark_repository.dart';
 import 'package:news_app/features/bookmark/models/bookmark_model.dart';
@@ -9,10 +11,19 @@ part 'bookmark_state.dart';
 
 class BookmarkCubit extends Cubit<BookmarkState> {
   BookmarkCubit() : super(const BookmarkState()) {
+    _bookmarksListenable = _repository.bookmarkBox.listenable();
+    _bookmarksListenable.addListener(_onBookmarksChanged);
     loadBookmarks();
   }
 
   final BookmarkRepository _repository = BookmarkRepository();
+  late final ValueListenable<Box<BookmarkModel>> _bookmarksListenable;
+
+  void _onBookmarksChanged() {
+    if (!isClosed) {
+      loadBookmarks();
+    }
+  }
 
   void loadBookmarks() {
     try {
@@ -100,5 +111,11 @@ class BookmarkCubit extends Cubit<BookmarkState> {
     return state.bookmarks
         .map((bookmark) => _repository.bookmarkToArticle(bookmark))
         .toList();
+  }
+
+  @override
+  Future<void> close() {
+    _bookmarksListenable.removeListener(_onBookmarksChanged);
+    return super.close();
   }
 }
