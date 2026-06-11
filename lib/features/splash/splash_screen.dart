@@ -23,6 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final onboardingComplete =
         PreferenceManger().getBool('onboarding_complete') ?? false;
     final isLoggedIn = PreferenceManger().getBool('is_logged_in') ?? false;
+    final hasAccessToken = PreferenceManger().getString('access_token') != null;
     if (!mounted) return;
     if (!onboardingComplete) {
       Navigator.pushReplacement(
@@ -33,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
           },
         ),
       );
-    } else if (!isLoggedIn) {
+    } else if (!isLoggedIn && !hasAccessToken) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

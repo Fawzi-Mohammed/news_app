@@ -118,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
                       () async {
                         await UserRepository().delete();
 
-                        await PreferenceManger().clear();
+                        await PreferenceManger().setBool('is_logged_in', false);
                         if (!context.mounted) {
                           return;
                         }

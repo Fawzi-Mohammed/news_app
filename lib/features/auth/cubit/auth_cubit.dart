@@ -40,6 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
             errorMessage: null,
           ),
         );
+        await PreferenceManger().setBool('is_logged_in', true);
       } else {
         emit(
           state.copyWith(
