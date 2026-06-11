@@ -1,0 +1,223 @@
+import 'dart:io';
+
+import 'package:country_picker/country_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
+import 'package:news_app/core/datasource/local_data/preference_manger.dart';
+import 'package:news_app/core/datasource/local_data/user_repository.dart';
+import 'package:news_app/core/theme/light_color.dart';
+import 'package:news_app/core/widgets/custom_svg_picture.dart';
+import 'package:news_app/features/auth/login_screen.dart';
+import 'package:news_app/features/profile/bottom_sheet/profile_info_bottom_sheet.dart';
+import 'package:news_app/features/profile/cubit/profile_cubit.dart';
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<ProfileCubit>(
+      create: (BuildContext context) => ProfileCubit()..getUserData(),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Profile'), centerTitle: true),
+        body: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: AppSizes.h24,
+            horizontal: AppSizes.w16,
+          ),
+          child: BlocBuilder<ProfileCubit, ProfileState>(
+            builder: (BuildContext context, state) {
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: state.selectedImage == null
+                                ? const AssetImage('assets/images/person.png')
+                                : FileImage(File(state.selectedImage!.path)),
+                            radius: AppSizes.r60,
+                            backgroundColor: Colors.transparent,
+                          ),
+                          GestureDetector(
+                            onTap: () => showImageSourceDialog(context),
+                            child: Container(
+                              height: AppSizes.w45,
+                              width: AppSizes.h45,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: const Icon(Icons.camera_alt),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: AppSizes.ph8),
+                    Center(
+                      child: Text(
+                        state.userName ?? '',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: AppSizes.sp16,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: AppSizes.ph16),
+                    _buildProfileItem(
+                      'Personal Info',
+                      'assets/images/profile.svg',
+                      () {
+                        final profileCubit = context.read<ProfileCubit>();
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (BuildContext context) {
+                            return const ProfileInfoBottomSheet();
+                          },
+                        ).then((value) {
+                          if (value == null) {
+                            return;
+                          }
+                          profileCubit.getUserData();
+                        });
+                      },
+                    ),
+                    _buildProfileItem(
+                      'Language',
+                      'assets/images/language.svg',
+                      () {},
+                    ),
+                    _buildProfileItem(
+                      state.countryName ?? 'Country',
+                      'assets/images/country.svg',
+                      () {
+                        showCountryPicker(
+                          context: context,
+                          onSelect: (Country country) {
+                            context.read<ProfileCubit>().saveCountry(country);
+                          },
+                        );
+                      },
+                    ),
+                    _buildProfileItem(
+                      'Terms & Conditions',
+                      'assets/images/terms_conditions.svg',
+                      () {},
+                    ),
+                    _buildProfileItem(
+                      'Logout',
+                      'assets/images/logout.svg',
+                      () async {
+                        await UserRepository().delete();
+
+                        await PreferenceManger().clear();
+                        if (!context.mounted) {
+                          return;
+                        }
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                              return const LoginScreen();
+                            },
+                          ),
+                        );
+                      },
+                      color: LightColors.primaryColor,
+                      withDivider: false,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showImageSourceDialog(BuildContext context) {
+    final ProfileCubit controller = context.read<ProfileCubit>();
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(
+            'Select Image Source',
+            style: TextStyle(fontSize: AppSizes.sp16),
+          ),
+          children: [
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+                controller.pickImage(ImageSource.camera);
+              },
+              padding: EdgeInsets.all(AppSizes.pw16),
+              child: Row(
+                children: [
+                  const Icon(Icons.camera_alt),
+                  SizedBox(width: AppSizes.pw8),
+                  const Text('Camera'),
+                ],
+              ),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+                controller.pickImage(ImageSource.gallery);
+              },
+              padding: EdgeInsets.all(AppSizes.ph16),
+              child: Row(
+                children: [
+                  const Icon(Icons.photo_library),
+                  SizedBox(width: AppSizes.pw8),
+                  const Text('Gallery'),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildProfileItem(
+    String title,
+    String path,
+    VoidCallback onTap, {
+    Color color = const Color(0xFF161F1B),
+    bool withDivider = true,
+  }) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: onTap,
+          title: Text(
+            title,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.w400,
+              fontSize: AppSizes.sp16,
+            ),
+          ),
+          leading: CustomSvgPicture.withoutColor(path: path),
+          trailing: CustomSvgPicture.withoutColor(
+            path: 'assets/images/arrow.svg',
+            height: AppSizes.h16,
+            width: AppSizes.w16,
+          ),
+          contentPadding: EdgeInsets.zero,
+        ),
+        if (withDivider) Divider(color: Colors.grey.shade500),
+      ],
+    );
+  }
+}

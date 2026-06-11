@@ -1,0 +1,228 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
+import 'package:news_app/core/enums/request_status_enum.dart';
+import 'package:news_app/core/extensions/date_time_extension.dart';
+import 'package:news_app/core/theme/light_color.dart';
+import 'package:news_app/core/widgets/bookmark_button.dart';
+import 'package:news_app/core/widgets/custom_cached_network_image.dart';
+import 'package:news_app/features/details/details_screen.dart';
+import 'package:news_app/features/home/components/trending_news_shimmer.dart';
+import 'package:news_app/features/home/components/view_all_component.dart';
+import 'package:news_app/features/home/cubit/home_cubit.dart';
+
+class TrendingNews extends StatelessWidget {
+  const TrendingNews({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: AppSizes.h330,
+        child: Stack(
+          children: [
+            SizedBox(
+              height: AppSizes.h240,
+              width: double.infinity,
+              child: Image.asset(
+                'assets/images/background.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned.fill(
+              top: 70,
+              child: Column(
+                children: [
+                  Text(
+                    'NEWST',
+                    style: TextStyle(
+                      fontSize: AppSizes.sp50,
+                      fontWeight: FontWeight.w600,
+                      color: LightColors.primaryColor,
+                    ),
+                  ),
+
+                  SizedBox(height: AppSizes.h6),
+                  ViewAllComponent(title: 'Trending News', onTap: () {}),
+                  SizedBox(height: AppSizes.ph12),
+                  SizedBox(
+                    height: AppSizes.h140,
+                    child: BlocBuilder<HomeCubit, HomeState>(
+                      builder: (context, state) {
+                        switch (state.everyThingStatus) {
+                          case RequestStatusEnum.initial:
+                          case RequestStatusEnum.loading:
+                            return TrendingNewsShimmer();
+                          case RequestStatusEnum.error:
+                            return Center(
+                              child: Text(state.errorMessage ?? 'Error'),
+                            );
+                          case RequestStatusEnum.loaded:
+                            return ListView.separated(
+                              padding: EdgeInsets.only(left: AppSizes.pw16),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: state.newsEveryThingList.length,
+                              separatorBuilder: (context, index) {
+                                return SizedBox(width: AppSizes.w12);
+                              },
+                              itemBuilder: (context, index) {
+                                final model = state.newsEveryThingList[index];
+
+                                return ClipRRect(
+                                  borderRadius: BorderRadiusGeometry.circular(
+                                    AppSizes.r8,
+                                  ),
+
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailsScreen(model: model),
+                                        ),
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      width: AppSizes.w240,
+                                      child: Stack(
+                                        children: [
+                                          CustomCachedNetworkImage(
+                                            url: model.urlToImage ?? '',
+                                            width: AppSizes.w240,
+                                            height: AppSizes.h140,
+                                          ),
+
+                                          Positioned.fill(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.black.withValues(
+                                                      alpha: 0.5,
+                                                    ),
+                                                    Colors.black.withValues(
+                                                      alpha: 0.7,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: AppSizes.ph8,
+                                            right: AppSizes.pw8,
+                                            child: BookmarkButton(
+                                              article: model,
+                                              size: 24,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            left: AppSizes.w12,
+                                            right: AppSizes.w12,
+
+                                            bottom: AppSizes.h12,
+                                            child: Column(
+                                              crossAxisAlignment: .start,
+                                              children: [
+                                                Text(
+                                                  model.title,
+                                                  style: TextStyle(
+                                                    color: Color(0xFFFFFCFC),
+                                                    fontSize: AppSizes.sp14,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                SizedBox(height: AppSizes.h6),
+
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Row(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius:
+                                                                AppSizes.r10,
+                                                            backgroundColor:
+                                                                Colors.white24,
+                                                            child: Icon(
+                                                              Icons.person,
+                                                              color:
+                                                                  Colors.white,
+                                                              size:
+                                                                  AppSizes.sp12,
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width: AppSizes.w4,
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              model.author ??
+                                                                  '',
+                                                              style: TextStyle(
+                                                                fontSize:
+                                                                    AppSizes
+                                                                        .sp12,
+                                                                color: Color(
+                                                                  0xFFFFFCFC,
+                                                                ),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                              ),
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: AppSizes.w6,
+                                                    ),
+                                                    Text(
+                                                      model.publishedAt
+                                                          .formateDateTime(),
+
+                                                      style: TextStyle(
+                                                        fontSize: AppSizes.sp12,
+                                                        color: Color(
+                                                          0xFFFFFCFC,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

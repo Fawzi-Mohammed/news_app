@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_app/core/datasource/local_data/preference_manger.dart';
+import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/theme/light_theme.dart';
-import 'package:news_app/features/onboarding/onboarding_screen.dart';
+import 'package:news_app/features/bookmark/data/bookmark_repository.dart';
+import 'package:news_app/features/splash/splash_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PreferenceManger().init();
+  await UserRepository().init();
+  await BookmarkRepository().init();
   runApp(const MyApp());
 }
 
@@ -11,11 +19,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'News App',
-      theme: lightTheme,
-      home: const OnboardingScreen(),
-      debugShowCheckedModeBanner: false,
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) => MaterialApp(
+        title: 'News App',
+        theme: lightTheme,
+        home: const SplashScreen(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
