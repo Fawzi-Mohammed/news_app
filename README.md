@@ -188,38 +188,45 @@ flutter run -d <device_id>
 
 ## 📸 Screenshots
 
-**Mockup & Key Screens:**
+### 🎨 App Mockup
+
+<div align="center">
+  <img src="assets/screens/mokup.png" width="300" alt="NEWST App Mockup" />
+  <p><i>Complete visual design of the NEWST news application</i></p>
+</div>
+
+### 📱 App Screens in Action
 
 <table>
   <tr>
-    <td align="center"><b>App Mockup</b></td>
     <td align="center"><b>Screen 1</b></td>
     <td align="center"><b>Screen 2</b></td>
-  </tr>
-  <tr>
-    <td><img src="assets/screens/mokup.png" width="200" alt="Mockup"/></td>
-    <td><img src="assets/screens/Screenshot_1781183451.png" width="200" alt="Screen 1"/></td>
-    <td><img src="assets/screens/Screenshot_1781183457.png" width="200" alt="Screen 2"/></td>
-  </tr>
-  <tr>
     <td align="center"><b>Screen 3</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screens/Screenshot_1781183451.png" width="180" alt="Screen 1"/></td>
+    <td><img src="assets/screens/Screenshot_1781183457.png" width="180" alt="Screen 2"/></td>
+    <td><img src="assets/screens/Screenshot_1781183466.png" width="180" alt="Screen 3"/></td>
+  </tr>
+  <tr>
     <td align="center"><b>Screen 4</b></td>
     <td align="center"><b>Screen 5</b></td>
-  </tr>
-  <tr>
-    <td><img src="assets/screens/Screenshot_1781183466.png" width="200" alt="Screen 3"/></td>
-    <td><img src="assets/screens/Screenshot_1781183477.png" width="200" alt="Screen 4"/></td>
-    <td><img src="assets/screens/Screenshot_1781183483.png" width="200" alt="Screen 5"/></td>
-  </tr>
-  <tr>
     <td align="center"><b>Screen 6</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screens/Screenshot_1781183477.png" width="180" alt="Screen 4"/></td>
+    <td><img src="assets/screens/Screenshot_1781183483.png" width="180" alt="Screen 5"/></td>
+    <td><img src="assets/screens/Screenshot_1781183493.png" width="180" alt="Screen 6"/></td>
+  </tr>
+  <tr>
     <td align="center"><b>Screen 7</b></td>
     <td align="center"><b>Screen 8</b></td>
+    <td></td>
   </tr>
   <tr>
-    <td><img src="assets/screens/Screenshot_1781183493.png" width="200" alt="Screen 6"/></td>
-    <td><img src="assets/screens/Screenshot_1781183498.png" width="200" alt="Screen 7"/></td>
-    <td><img src="assets/screens/Screenshot_1781183503.png" width="200" alt="Screen 8"/></td>
+    <td><img src="assets/screens/Screenshot_1781183498.png" width="180" alt="Screen 7"/></td>
+    <td><img src="assets/screens/Screenshot_1781183503.png" width="180" alt="Screen 8"/></td>
+    <td></td>
   </tr>
 </table>
 
@@ -357,8 +364,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Fawzi Mohammed**
 - GitHub: [@Fawzi-Mohammed](https://github.com/Fawzi-Mohammed)
+- LinkedIn: [Fawzi Mohammed](https://linkedin.com/in/fawzi-mohammed)
 - Email: [fawzi@example.com](mailto:fawzi@example.com)
-- LinkedIn: [Your Profile](https://linkedin.com/in/yourprofile)
 
 ---
 
