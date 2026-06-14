@@ -191,8 +191,9 @@ flutter run -d <device_id>
 ### 🎨 App Mockup
 
 <div align="center">
-  <img src="assets/screens/mokup.png" width="300" alt="NEWST App Mockup" />
-  <p><i>Complete visual design of the NEWST news application</i></p>
+  <img src="assets/screens/mokup.png" width="680" alt="NEWST App Mockup" style="max-width:100%; height:auto; border-radius:24px; box-shadow:0 18px 45px rgba(0,0,0,0.18);" />
+  <h4>NEWST is a polished Flutter news experience with clean UI, search, bookmarks, and profile persistence.</h4>
+  <p><i>Designed for portfolio presentation and recruiter-friendly first impressions.</i></p>
 </div>
 
 ### 📱 App Screens in Action
